@@ -25,5 +25,12 @@ public class Ball implements Paintable {
         g2.fillOval(x - dm / 2, y - dm / 2, dm, dm);
     }
 
+    public int getX(){
+        return x;
+    }
+    public int getY(){
+        return y;
+    }
+
 }
 /*/fg*/
