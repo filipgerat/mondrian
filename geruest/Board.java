@@ -22,11 +22,13 @@ public class Board extends JPanel implements ActionListener {
 
     /* the two dimensional array to store the board values
      * STATES OF FIELD: */
-    public enum FieldState {
+     public enum FieldState {
         COLORED, LINE, UNCOLORED, DONT_COLOR
     }
     /* The main player Board */
     public FieldState[][] theBoard;
+
+    //TODO: implement a Color[WIDTH][HEIGHT] table for the different colors of territories
 
     /* The moveable components of the game */
     private LinkedList<Moveable> moveables = new LinkedList<Moveable>();
@@ -85,6 +87,9 @@ public class Board extends JPanel implements ActionListener {
     /*fg: Timer Task */
     @Override
     public void actionPerformed(ActionEvent e) {
+
+        //TODO: check if percent > 80, then gameOver()
+
         /* Move the objects */
         for (Moveable m: moveables) {
             m.move();
@@ -103,7 +108,10 @@ public class Board extends JPanel implements ActionListener {
             for (int j = 0; j<HEIGHT; j++){
                 switch (theBoard[i][j]){
                     case LINE:
-                    case COLORED: g2.setPaint(PLAYER_COLOR); break;
+                    case COLORED:
+                        // TODO: Find color in the color table and setPaint.
+                        g2.setPaint(PLAYER_COLOR);
+                        break;
                     default:  g2.setPaint(BG_COLOR); break;
                 }
                 g2.drawLine(i,j,i,j);
@@ -128,6 +136,8 @@ public class Board extends JPanel implements ActionListener {
     /* Game over function */
     public void gameOver(){
         timer.stop();
+
+        //TODO: write a proper gameOver function, check if percent > 80, if yes, do a winning screen, if no make a losing screen
     }
 
     /* Fill the board after closing a teritory */
@@ -155,12 +165,15 @@ public class Board extends JPanel implements ActionListener {
         /* Color all the rest of points, and unmark the territories */
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
+                //TODO: set a color, random or create a sequence
                 switch (theBoard[i][j]) {
                     case UNCOLORED:
                         theBoard[i][j] = FieldState.COLORED;
+                        //TODO: fill the corresponding pixel in the color table
                         break;
                     case LINE:
                         theBoard[i][j] = FieldState.COLORED;
+                        //TODO: fill the corresponding pixel in the color table
                         break;
                     case DONT_COLOR:
                         theBoard[i][j] = FieldState.UNCOLORED;

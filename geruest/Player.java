@@ -68,6 +68,11 @@ public class Player extends Ball implements Moveable {
             state = PlayerState.STABLE;
         }
 
+        /* TODO: When steps on a LINE, delete the created rectangle(bounds of territory respectively). http://sketchtoy.com/65629031
+        *   tip: since you have the direction saved, find the pixel above, make it UNCOLORED and check [x+1][y],
+        *   [x][y+1], [x-1][y], [x][y-1], if != [Player.x][Player.y] move to that pixel and repeat.
+        * */
+
     }
 
 

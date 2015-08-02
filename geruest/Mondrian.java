@@ -1,6 +1,8 @@
 import java.awt.*;
 import javax.swing.*;
 
+//TODO: (optional) Exception handling
+
 public class Mondrian extends JFrame {
 
     public Mondrian() {

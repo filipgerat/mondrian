@@ -6,6 +6,8 @@ import java.awt.*;
 public class Enemy extends Ball implements Moveable {
     Direction d;
 
+    /*TODO: add horizontal and vertical directions to movement, make appropriate changes in the constructor/move() */
+
     public enum Direction {
         UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT
     }
@@ -32,6 +34,8 @@ public class Enemy extends Ball implements Moveable {
         }
 
         /* Check Collisions */
+        // TODO: add collision with Player
+        // TODO: (optional) change this pseudo collision checking with precise collision checking
         for (int i = 1; i < dm - 1; i++){
             // Left
             if (this.b.theBoard[x - dm/2][y - dm/2 + i] == Board.FieldState.COLORED) {
