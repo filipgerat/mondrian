@@ -5,6 +5,8 @@ import javax.swing.*;
 
 public class Mondrian extends JFrame {
 
+    public static final int RANDOM = 100;
+
     public Mondrian() {
         add(new Board());
 

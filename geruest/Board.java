@@ -43,6 +43,17 @@ public class Board extends JPanel implements ActionListener {
 
     /*/fg*/
 
+    //andreas
+    public int getPlayerX() {
+        if( moveables.isEmpty() ) return 0;
+        return moveables.get(0).getX();
+    }
+
+    public int getPlayerY() {
+        if( moveables.isEmpty() ) return 0;
+        return moveables.get(0).getY();
+    }
+
     public Board() {
         super();
 
@@ -101,7 +112,8 @@ public class Board extends JPanel implements ActionListener {
         for (Moveable m: moveables) {
             m.move();
             if(m.getClass().getCanonicalName().equalsIgnoreCase("Enemy")) {
-                if( Ball.isCollided( moveables.get(0), m )) {
+                if( Ball.isCollided( moveables.get(0), m )) { //andreas: Check collision between enemy and player
+                    //if players center is in a field or on edge, player is secure.
                     if( theBoard[moveables.get(0).getX()][moveables.get(0).getY()] != FieldState.COLORED ) gameOver();
                 }
             }

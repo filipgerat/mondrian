@@ -25,13 +25,11 @@ public class Enemy extends Ball implements Moveable {
             case 6: d = Direction.DOWN; break; //andreas
             case 7: d = Direction.LEFT; break; //andreas
         }
-
     }
-
-
 
     @Override
     public void move() {
+        boolean noChange = true;
 
         /* Move */
         switch (d){
@@ -45,42 +43,70 @@ public class Enemy extends Ball implements Moveable {
             case LEFT: x-=s; break;
         }
 
+        if (x<0+dm/2+1) x= dm/2+2; if (y<0+dm/2+1) y=dm/2+2; if (x>b.WIDTH-dm/2-1) x=b.WIDTH-dm/2-2; if (y>b.HEIGHT-dm/2-1) y=b.HEIGHT-dm/2-2;
+
         // Left
-        if ( x-dm/2 < 0 || y-dm/2+1 < 0 || this.b.theBoard[x - dm/2][y - dm/2 + 1] == Board.FieldState.COLORED) {
+        if ( x<0+dm/2+1 || y<0+dm/2+1 || this.b.theBoard[x - dm/2][y - dm/2 + 1] == Board.FieldState.COLORED) {
             if (d == Direction.DOWN_LEFT) d = Direction.DOWN_RIGHT;
             else if (d == Direction.UP_LEFT) d = Direction.UP_RIGHT;
             else if (d == Direction.UP) d = Direction.RIGHT; //andreas
+            noChange=false;
         }
         if ( this.b.theBoard[x - dm/2][y - dm/2 + 1] == Board.FieldState.LINE) {
             b.gameOver();
         }
         // Right
-        if ( x+dm/2 > b.WIDTH || y-dm/2+1 < 0 || this.b.theBoard[x + dm/2][y - dm/2 + 1] == Board.FieldState.COLORED) {
+        if ( x>b.WIDTH-dm/2-1 || y<0+dm/2+1 || this.b.theBoard[x + dm/2][y - dm/2 + 1] == Board.FieldState.COLORED) {
             if (d == Direction.DOWN_RIGHT) d = Direction.DOWN_LEFT;
             else if (d == Direction.UP_RIGHT) d = Direction.UP_LEFT;
             else if (d == Direction.RIGHT) d = Direction.LEFT; //andreas
+            noChange=false;
         }
         if ( this.b.theBoard[x + dm/2][y - dm/2 + 1] == Board.FieldState.LINE) {
             b.gameOver();
         }
         // Up
-        if ( x-dm/2+1 < 0 || y-dm/2 < 0 || this.b.theBoard[x - dm/2 + 1][y - dm/2] == Board.FieldState.COLORED) {
+        if ( x<0+dm/2+1 || y<0+dm/2+1 || this.b.theBoard[x - dm/2 + 1][y - dm/2] == Board.FieldState.COLORED) {
             if (d == Direction.UP_LEFT) d = Direction.DOWN_LEFT;
             else if (d == Direction.UP_RIGHT) d = Direction.DOWN_RIGHT;
             else if (d == Direction.UP) d = Direction.DOWN; //andreas
+            noChange=false;
         }
         if ( this.b.theBoard[x - dm/2 + 1][y - dm/2] == Board.FieldState.LINE) {
             b.gameOver();
         }
         // Down
-        if ( x-dm/2+1 < 0 || y+dm/2 > b.HEIGHT || this.b.theBoard[x - dm/2 + 1][y + dm/2] == Board.FieldState.COLORED) {
+        if ( x<0+dm/2+1 || y>b.HEIGHT-dm/2-1 || this.b.theBoard[x - dm/2 + 1][y + dm/2] == Board.FieldState.COLORED) {
             if (d == Direction.DOWN_LEFT) d = Direction.UP_LEFT;
             else if (d == Direction.DOWN_RIGHT) d = Direction.UP_RIGHT;
             else if (d == Direction.DOWN) d = Direction.UP; //andreas
+            noChange=false;
         }
         if ( this.b.theBoard[x - dm/2 + 1][y + dm/2] == Board.FieldState.LINE) {
             b.gameOver();
         }
 
+        if( noChange ) {
+            int i = (int)(Math.random()*10000);
+            if( i%1131<100 ) {
+                int px = b.getPlayerX();
+                int py = b.getPlayerY();
+                if( px > x ) i = i%3;
+                else if( py < y ) i = i%3+2;
+                else if( px < x ) i = i%3+4;
+                else if( py > y ) i = i%3+6;
+            }
+            switch(i%Mondrian.RANDOM){
+                case 0: d = Direction.DOWN_RIGHT; break;
+                case 1: d = Direction.RIGHT; break; //andreas
+                case 2: d = Direction.UP_RIGHT; break;
+                case 3: d = Direction.UP; break; //andreas
+                case 4: d = Direction.UP_LEFT; break;
+                case 5: d = Direction.LEFT; break; //andreas
+                case 6: d = Direction.DOWN_LEFT; break;
+                case 7: d = Direction.DOWN; break; //andreas
+                case 8: d = Direction.DOWN_RIGHT; break;
+            }
+        }
     }
 }
