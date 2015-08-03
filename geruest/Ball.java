@@ -10,6 +10,14 @@ public class Ball implements Paintable {
     int dm;
     Color c;
 
+    /**
+     * Makes a new Ball
+     * @param b The board, on which the ball will be painted.
+     * @param x The x-coordinate on the board of the ball.
+     * @param y The y-coordinate on the board of the ball.
+     * @param dm The diameter of the ball.
+     * @param c The color of the ball.
+     */
     public Ball(Board b, int x, int y, int dm, Color c){
         this.b = b;
         this.x = x;

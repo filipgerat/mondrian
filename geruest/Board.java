@@ -28,7 +28,11 @@ public class Board extends JPanel implements ActionListener {
     /* The main player Board */
     public FieldState[][] theBoard;
 
-    //TODO: implement a Color[WIDTH][HEIGHT] table for the different colors of territories
+    /** Colors for the fields. //andreas */
+    public final static Color[] COLORS = new Color[]{ Color.RED, Color.YELLOW, Color.CYAN, Color.BLACK, Color.LIGHT_GRAY };
+    private int colorIterator = 0;
+    //andreas
+    Color[][] colorTable = new Color[WIDTH][HEIGHT];
 
     /* The moveable components of the game */
     private LinkedList<Moveable> moveables = new LinkedList<Moveable>();
@@ -57,7 +61,7 @@ public class Board extends JPanel implements ActionListener {
         }
 
         /* Initialize player: */
-        Player p = new Player(this, 0, 0, 8, Color.blue);
+        Player p = new Player(this, 0, 0, 12, Color.blue);
         moveables.offer(p);
         paintables.offer(p);
 
@@ -66,7 +70,7 @@ public class Board extends JPanel implements ActionListener {
         addKeyListener(new MondrianKeyListener(p));
 
         /* Initialize Enemy */
-        Enemy e = new Enemy(this, (int)Math.round(Math.random() * WIDTH - 2) + 1, (int)Math.round(Math.random() * HEIGHT - 2) + 1, 3, Color.red);
+        Enemy e = new Enemy(this, (int)Math.round(Math.random() * WIDTH - 2) + 1, (int)Math.round(Math.random() * HEIGHT - 2) + 1, 8, Color.red);
         moveables.offer(e);
         paintables.offer(e);
 
@@ -88,7 +92,7 @@ public class Board extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        //TODO: check if percent > 80, then gameOver()
+        if( percent>=0.8 ) gameOver(); //andreas
 
         /* Move the objects */
         for (Moveable m: moveables) {
@@ -104,13 +108,14 @@ public class Board extends JPanel implements ActionListener {
         /* Paint the board */
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        for (int i = 0; i<WIDTH; i++){
-            for (int j = 0; j<HEIGHT; j++){
+        for (int i = 0; i<WIDTH; i++){ //line for line
+            for (int j = 0; j<HEIGHT; j++){ //column for column in the i-th line
                 switch (theBoard[i][j]){
                     case LINE:
+                        g2.setPaint(COLORS[(colorIterator+1) % COLORS.length]);//andreas
+                        break;
                     case COLORED:
-                        // TODO: Find color in the color table and setPaint.
-                        g2.setPaint(PLAYER_COLOR);
+                        g2.setPaint(colorTable[i][j]); //andreas
                         break;
                     default:  g2.setPaint(BG_COLOR); break;
                 }
@@ -122,6 +127,7 @@ public class Board extends JPanel implements ActionListener {
             p.paintComponent(g2);
         }
         /* Paint progress */
+        g2.setPaint(Color.PINK);
         g2.drawString(String.format("%.1f / 80%%", percent * 100), WIDTH - 55, 10);
     }
 
@@ -136,8 +142,8 @@ public class Board extends JPanel implements ActionListener {
     /* Game over function */
     public void gameOver(){
         timer.stop();
-
-        //TODO: write a proper gameOver function, check if percent > 80, if yes, do a winning screen, if no make a losing screen
+        if( percent>=0.8 ) JOptionPane.showMessageDialog( this, "Gewonnen!" );
+        else JOptionPane.showMessageDialog( this, "Haha! Verloren!" );
     }
 
     /* Fill the board after closing a teritory */
@@ -157,23 +163,22 @@ public class Board extends JPanel implements ActionListener {
                         if (theBoard[p.x][p.y - 1] == FieldState.UNCOLORED) q.offer(new Point(p.x, p.y - 1));
                     }
                 }
-
             }
         }
         /* Recalculate progress */
         double colored = 0;
         /* Color all the rest of points, and unmark the territories */
+        colorIterator++; //set color for next field //andreas
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
-                //TODO: set a color, random or create a sequence
                 switch (theBoard[i][j]) {
                     case UNCOLORED:
                         theBoard[i][j] = FieldState.COLORED;
-                        //TODO: fill the corresponding pixel in the color table
+                        colorTable[i][j] = COLORS[colorIterator % COLORS.length]; //andreas
                         break;
                     case LINE:
                         theBoard[i][j] = FieldState.COLORED;
-                        //TODO: fill the corresponding pixel in the color table
+                        colorTable[i][j] = COLORS[colorIterator % COLORS.length]; //andreas
                         break;
                     case DONT_COLOR:
                         theBoard[i][j] = FieldState.UNCOLORED;
