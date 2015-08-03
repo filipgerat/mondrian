@@ -26,6 +26,20 @@ public class Ball implements Paintable {
         this.c = c;
     }
 
+    /**
+     * Andreas: Checks if two balls are collided.
+     * @param ball1
+     * @param ball2
+     * @return True, if collided, false otherwise
+     */
+    public static boolean isCollided(Moveable ball1, Moveable ball2) {
+        int size1=ball1.getSize()/2;
+        int size2=ball2.getSize()/2;
+        double xDif = ball1.getX() - ball2.getX();
+        double yDif = ball1.getY() - ball2.getY();
+        double distanceSquared = xDif * xDif + yDif * yDif;
+        return distanceSquared < (size1 + size2) * (size1 + size2);
+    }
 
     @Override
     public void paintComponent(Graphics2D g2) {
@@ -38,6 +52,10 @@ public class Ball implements Paintable {
     }
     public int getY(){
         return y;
+    }
+
+    public int getSize() {
+        return dm;
     }
 
 }

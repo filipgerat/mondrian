@@ -7,14 +7,15 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
 
-    private final int WIDTH = 200;
-    private final int HEIGHT = 200;
+    public final int WIDTH = 200;
+    public final int HEIGHT = 200;
 
     /*fg: Timer */
     private Timer timer;
 
     /* Progress to win */
     private double percent;
+    private boolean over=false;
 
     /* Main colors */
     private final Color PLAYER_COLOR = Color.yellow;
@@ -92,11 +93,18 @@ public class Board extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if( percent>=0.8 ) gameOver(); //andreas
+        if( percent>=0.8 && !over){
+            gameOver(); //andreas
+        }
 
         /* Move the objects */
         for (Moveable m: moveables) {
             m.move();
+            if(m.getClass().getCanonicalName().equalsIgnoreCase("Enemy")) {
+                if( Ball.isCollided( moveables.get(0), m )) {
+                    if( theBoard[moveables.get(0).getX()][moveables.get(0).getY()] != FieldState.COLORED ) gameOver();
+                }
+            }
         }
         repaint();
     }
@@ -142,8 +150,11 @@ public class Board extends JPanel implements ActionListener {
     /* Game over function */
     public void gameOver(){
         timer.stop();
-        if( percent>=0.8 ) JOptionPane.showMessageDialog( this, "Gewonnen!" );
-        else JOptionPane.showMessageDialog( this, "Haha! Verloren!" );
+        if( !over ) {
+            over = true;
+            if (percent >= 0.8) JOptionPane.showMessageDialog(this, "Gewonnen!");
+            else JOptionPane.showMessageDialog(this, "Haha! Verloren!");
+        }
     }
 
     /* Fill the board after closing a teritory */

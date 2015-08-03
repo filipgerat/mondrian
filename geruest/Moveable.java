@@ -5,4 +5,5 @@ public interface Moveable {
     public void move();
     public int getX();
     public int getY();
+    public int getSize();
 }
