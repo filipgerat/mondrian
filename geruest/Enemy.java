@@ -42,48 +42,64 @@ public class Enemy extends Ball implements Moveable {
             case DOWN: y+=s; break;
             case LEFT: x-=s; break;
         }
+        // These place the enemy inside the bounds
+        if (x<0+dm/2) x= dm/2;
+        if (y<0+dm/2) y=dm/2;
+        if (x>b.WIDTH-dm/2-1) x=b.WIDTH-dm/2-1;
+        if (y>b.HEIGHT-dm/2-1) y=b.HEIGHT-dm/2-1;
 
-        if (x<0+dm/2+1) x= dm/2+2; if (y<0+dm/2+1) y=dm/2+2; if (x>b.WIDTH-dm/2-1) x=b.WIDTH-dm/2-2; if (y>b.HEIGHT-dm/2-1) y=b.HEIGHT-dm/2-2;
+        /* Border pixels of the Jpanel are COLORED, so when they reach/overstep the bounds of the Jpanel, they are
+         * placed on the border, and after that the proper collision is invoked.
+         */
 
-        // Left
-        if ( x<0+dm/2+1 || y<0+dm/2+1 || this.b.theBoard[x - dm/2][y - dm/2 + 1] == Board.FieldState.COLORED) {
-            if (d == Direction.DOWN_LEFT) d = Direction.DOWN_RIGHT;
-            else if (d == Direction.UP_LEFT) d = Direction.UP_RIGHT;
-            else if (d == Direction.UP) d = Direction.RIGHT; //andreas
-            noChange=false;
-        }
-        if ( this.b.theBoard[x - dm/2][y - dm/2 + 1] == Board.FieldState.LINE) {
-            b.gameOver();
-        }
-        // Right
-        if ( x>b.WIDTH-dm/2-1 || y<0+dm/2+1 || this.b.theBoard[x + dm/2][y - dm/2 + 1] == Board.FieldState.COLORED) {
-            if (d == Direction.DOWN_RIGHT) d = Direction.DOWN_LEFT;
-            else if (d == Direction.UP_RIGHT) d = Direction.UP_LEFT;
-            else if (d == Direction.RIGHT) d = Direction.LEFT; //andreas
-            noChange=false;
-        }
-        if ( this.b.theBoard[x + dm/2][y - dm/2 + 1] == Board.FieldState.LINE) {
-            b.gameOver();
-        }
-        // Up
-        if ( x<0+dm/2+1 || y<0+dm/2+1 || this.b.theBoard[x - dm/2 + 1][y - dm/2] == Board.FieldState.COLORED) {
-            if (d == Direction.UP_LEFT) d = Direction.DOWN_LEFT;
-            else if (d == Direction.UP_RIGHT) d = Direction.DOWN_RIGHT;
-            else if (d == Direction.UP) d = Direction.DOWN; //andreas
-            noChange=false;
-        }
-        if ( this.b.theBoard[x - dm/2 + 1][y - dm/2] == Board.FieldState.LINE) {
-            b.gameOver();
-        }
-        // Down
-        if ( x<0+dm/2+1 || y>b.HEIGHT-dm/2-1 || this.b.theBoard[x - dm/2 + 1][y + dm/2] == Board.FieldState.COLORED) {
-            if (d == Direction.DOWN_LEFT) d = Direction.UP_LEFT;
-            else if (d == Direction.DOWN_RIGHT) d = Direction.UP_RIGHT;
-            else if (d == Direction.DOWN) d = Direction.UP; //andreas
-            noChange=false;
-        }
-        if ( this.b.theBoard[x - dm/2 + 1][y + dm/2] == Board.FieldState.LINE) {
-            b.gameOver();
+        /* Check Collisions */
+        // TODO: Collision with player
+        for (int i = 1; i < dm - 1; i++) {
+            // Left -- trigger when the value touches the left side or a colored surface
+            if (this.b.theBoard[x - dm / 2][y - dm / 2 + i] == Board.FieldState.COLORED) {
+                // Here we push the object away, so we won't face the same collision
+                x += s;
+                if (d == Direction.DOWN_LEFT) d = Direction.DOWN_RIGHT;
+                else if (d == Direction.UP_LEFT) d = Direction.UP_RIGHT;
+                else if (d == Direction.LEFT) d = Direction.RIGHT; //andreas
+                noChange=false;
+            }
+            if (this.b.theBoard[x - dm / 2][y - dm / 2 + i] == Board.FieldState.LINE) {
+                b.gameOver();
+            }
+            // Right
+            if (this.b.theBoard[x + dm / 2][y - dm / 2 + i] == Board.FieldState.COLORED) {
+                x -= s;
+                if (d == Direction.DOWN_RIGHT) d = Direction.DOWN_LEFT;
+                else if (d == Direction.UP_RIGHT) d = Direction.UP_LEFT;
+                else if (d == Direction.RIGHT) d = Direction.LEFT; //andreas
+                noChange=false;
+            }
+            if (this.b.theBoard[x + dm / 2][y - dm / 2 + i] == Board.FieldState.LINE) {
+                b.gameOver();
+            }
+            // Up
+            if (this.b.theBoard[x - dm / 2 + i][y - dm / 2] == Board.FieldState.COLORED) {
+                y += s;
+                if (d == Direction.UP_LEFT) d = Direction.DOWN_LEFT;
+                else if (d == Direction.UP_RIGHT) d = Direction.DOWN_RIGHT;
+                else if (d == Direction.UP) d = Direction.DOWN; //andreas
+                noChange=false;
+            }
+            if (this.b.theBoard[x - dm / 2 + i][y - dm / 2] == Board.FieldState.LINE) {
+                b.gameOver();
+            }
+            // Down
+            if (this.b.theBoard[x - dm / 2 + i][y + dm / 2] == Board.FieldState.COLORED) {
+                y -= s;
+                if (d == Direction.DOWN_LEFT) d = Direction.UP_LEFT;
+                else if (d == Direction.DOWN_RIGHT) d = Direction.UP_RIGHT;
+                else if (d == Direction.DOWN) d = Direction.UP; //andreas
+                noChange=false;
+            }
+            if (this.b.theBoard[x - dm / 2 + i][y + dm / 2] == Board.FieldState.LINE) {
+                b.gameOver();
+            }
         }
 
         if( noChange ) {
