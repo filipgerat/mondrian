@@ -7,6 +7,7 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
 
+    /** WIDTH and HEIGHT of the Board */
     public final int WIDTH = 200;
     public final int HEIGHT = 200;
 
@@ -43,17 +44,27 @@ public class Board extends JPanel implements ActionListener {
 
     /*/fg*/
 
-    //andreas
+    /**
+     * Returns the X-coordinate of the Player
+     * @return x, or 0 if there is no player.
+     */
     public int getPlayerX() {
         if( moveables.isEmpty() ) return 0;
         return moveables.get(0).getX();
     }
 
+    /**
+     * Returns the Y-coordinate of the Player
+     * @return y, or 0 if there is no player.
+     */
     public int getPlayerY() {
         if( moveables.isEmpty() ) return 0;
         return moveables.get(0).getY();
     }
 
+    /**
+     * Constructor for the Board.
+     */
     public Board() {
         super();
 
@@ -90,9 +101,7 @@ public class Board extends JPanel implements ActionListener {
         timer = new Timer(18, this);
         timer.start();
 
-
         /*/fg*/
-
 
         setBackground(Color.WHITE);
 
@@ -100,7 +109,13 @@ public class Board extends JPanel implements ActionListener {
         setDoubleBuffered(true);
     }
 
-    /*fg: Timer Task */
+    /**
+     * Timer Task.
+     * Will check if fields take more than 80% of the board -> Player wins.
+     * Will also check collision between player and enemy. (Player loses)
+     * Will repaint the board.
+     * @param e The ActionEvent from the KeyListener.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -122,7 +137,14 @@ public class Board extends JPanel implements ActionListener {
     }
     /*/fg*/
 
-    /*fg: Drawing */
+    /**
+     * Draws the board.
+     * Paints all the fields, lines and balls (player and enemy).
+     * This method will be called automatically by Swing, whenever it has time for it.
+     * Do not call this method manually.
+     * You can try to achieve a "manual" call by calling repaint();
+     * @param g The graphics component of the board.
+     */
     public void paintComponent( Graphics g ) {
 
         /* Paint the board */
@@ -151,15 +173,10 @@ public class Board extends JPanel implements ActionListener {
         g2.drawString(String.format("%.1f / 80%%", percent * 100), WIDTH - 55, 10);
     }
 
-    /* Helpers for bounds detection in movement functions */
-    public int getHeight(){
-        return HEIGHT;
-    }
-    public int getWidth(){
-        return WIDTH;
-    }
-
-    /* Game over function */
+    /** Game over function
+     * Stops the timer and outputs a win or a lost-dialog.
+     * Ensures that multiple calls of this method will result in only one output dialog.
+     */
     public void gameOver(){
         timer.stop();
         if( !over ) {
@@ -169,7 +186,10 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-    /* Fill the board after closing a teritory */
+    /** Fill the board after closing a teritory.
+     * This paints the fields. Rotates between 5 different colors for each new field.
+     * Automatically paints the field, where the enemy is NOT.
+     */
     public void fillProper() {
         /* Get the enemies, and iteratively mark the territories, in which they are */
         for (Moveable e : moveables) {
@@ -214,9 +234,5 @@ public class Board extends JPanel implements ActionListener {
         }
         percent = colored / (WIDTH * HEIGHT);
     }
-
-
-    /*/fg*/
-
 
 }

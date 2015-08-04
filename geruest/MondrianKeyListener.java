@@ -45,6 +45,10 @@ public class MondrianKeyListener extends KeyAdapter {
         }
     }
 
+    /**
+     * Constructor for MondrianKeyListener.
+     * @param b The Player whose direction will be changed.
+     */
     public MondrianKeyListener(Player b){
         this.b = b;
     }

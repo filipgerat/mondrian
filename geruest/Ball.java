@@ -28,8 +28,8 @@ public class Ball implements Paintable {
 
     /**
      * Andreas: Checks if two balls are collided.
-     * @param ball1
-     * @param ball2
+     * @param ball1 Ball one to check collision with ball 2.
+     * @param ball2 Ball 2.
      * @return True, if collided, false otherwise
      */
     public static boolean isCollided(Moveable ball1, Moveable ball2) {
@@ -41,19 +41,37 @@ public class Ball implements Paintable {
         return distanceSquared < (size1 + size2) * (size1 + size2);
     }
 
+    /**
+     * Sets the color of this ball and paints a filled Oval.
+     * Should be called within the main paintComponent method.
+     * @param g2
+     */
     @Override
     public void paintComponent(Graphics2D g2) {
         g2.setPaint(c);
         g2.fillOval(x - dm / 2, y - dm / 2, dm, dm);
     }
 
+    /**
+     * Getter for the x-coordinate of the Ball.
+     * @return x
+     */
     public int getX(){
         return x;
     }
+
+    /**
+     * Getter for the y-coordinate of the Ball.
+     * @return y
+     */
     public int getY(){
         return y;
     }
 
+    /**
+     * Getter for the size of the ball (diameter) in pixels.
+     * @return diameter
+     */
     public int getSize() {
         return dm;
     }

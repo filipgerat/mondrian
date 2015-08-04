@@ -9,10 +9,19 @@ public class Enemy extends Ball implements Moveable {
     //speed
     private final int s = 1;
 
+    /** Direction of the enemy */
     public enum Direction {
         UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT, UP, RIGHT, DOWN, LEFT //andreas: up, down, left, right
     }
 
+    /**
+     * Constructor for enemy. (Filled Circle)
+     * @param b The Board, on which the enemy will be painted.
+     * @param x The starting x-coordinate of the enemy.
+     * @param y The starting y-coordinate of the enemy.
+     * @param dm The diameter of the enemy in pixels.
+     * @param c The color of the enemy.
+     */
     public Enemy(Board b, int x, int y, int dm, Color c) {
         super(b, x, y, dm, c);
         switch((int)Math.round(Math.random()*7)){
@@ -27,9 +36,16 @@ public class Enemy extends Ball implements Moveable {
         }
     }
 
+    /**
+     * Moves the enemy according to its saved direction and coordinate data.
+     * This method also calculates random movement for the Enemy,
+     * once completely random, once it tries to change the direction towards the Player.
+     * The chances for these behaviours can be set either in Mondrian.java:RANDOM, or directly
+     * in this method (see bottom values).
+     */
     @Override
     public void move() {
-        boolean noChange = true;
+        boolean noChange = true; //Do not change randomly if direction will be changed due to walls.
 
         /* Move */
         switch (d){
@@ -52,8 +68,7 @@ public class Enemy extends Ball implements Moveable {
          * placed on the border, and after that the proper collision is invoked.
          */
 
-        /* Check Collisions */
-        // TODO: Collision with player
+        /* Check Collisions: Collision with Player is in Board.java */
         for (int i = 1; i < dm - 1; i++) {
             // Left -- trigger when the value touches the left side or a colored surface
             if (this.b.theBoard[x - dm / 2][y - dm / 2 + i] == Board.FieldState.COLORED) {
@@ -102,20 +117,23 @@ public class Enemy extends Ball implements Moveable {
             }
         }
 
+        /**
+         * Only change direction randomly if not changed just right now due to a wall or a field.
+         */
         if( noChange ) {
-            int i = (int)(Math.random()*10000);
-            if( i%1131<100 ) {
-                int px = b.getPlayerX();
+            int i = (int)(Math.random()*10000); //Get a random number between 0 and 10.000
+            if( i%1131<100 ) {                  //Change values here to raise or lower the possibility of changing the
+                int px = b.getPlayerX();        //direction TOWARDS the Player
                 int py = b.getPlayerY();
-                if( px > x ) i = i%3;
-                else if( py < y ) i = i%3+2;
+                if( px > x ) i = i%3;           //sets i for on of 3 possible directions (see bottom) which are mostly
+                else if( py < y ) i = i%3+2;    //towards the player
                 else if( px < x ) i = i%3+4;
                 else if( py > y ) i = i%3+6;
             }
-            switch(i%Mondrian.RANDOM){
-                case 0: d = Direction.DOWN_RIGHT; break;
-                case 1: d = Direction.RIGHT; break; //andreas
-                case 2: d = Direction.UP_RIGHT; break;
+            switch(i%Mondrian.RANDOM){          //Either changes the direction Towards the player (if i changed above
+                case 0: d = Direction.DOWN_RIGHT; break; //i will stay, as it is always smaller than RANDOM... i%RANDOM will then be i
+                case 1: d = Direction.RIGHT; break; //if i is bigger than 8 however, the direction will not be changed, or it will change
+                case 2: d = Direction.UP_RIGHT; break; //randomly if i%RANDOM is between 0 and 8.
                 case 3: d = Direction.UP; break; //andreas
                 case 4: d = Direction.UP_LEFT; break;
                 case 5: d = Direction.LEFT; break; //andreas

@@ -5,7 +5,8 @@ import javax.swing.*;
 
 public class Mondrian extends JFrame {
 
-    public static final int RANDOM = 100;
+    public static final int RANDOM = 100; //A greater value results in less random changes of the enemy. A smaller
+                                            //value results in more frequent random changes of the enemy.
 
     public Mondrian() {
         add(new Board());
